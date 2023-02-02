@@ -1,7 +1,5 @@
 import numpy as np
 import cv2
-import os
-from functools import reduce
 from keras.models import load_model
 
 class PneumoniaDetect():
