@@ -9,6 +9,8 @@
 
 > Geliştirilmeye devam ediyor.
 > Eklenecek özellikler:
+> - Brain Tumor Detection (3 Type Tumor)
+> - Breast Cancer Detection
 > - Diabetes Detection
 > - Kidney Cancer
 > - Oral Cancer
