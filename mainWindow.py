@@ -15,7 +15,69 @@ class Ui(QtWidgets.QMainWindow):
 
     def init_ui(self):
         uic.loadUi('./UI/mainWindow.ui', self)
-        self.pushButtonCheck.clicked.connect(self.check)
+        self.pushButtonHome.clicked.connect(self.setPageHome)
+        self.pushButtonPneumonia.clicked.connect(self.setPagePneumonia)
+        self.pushButtonBrainTumor.clicked.connect(self.setPageBrainTumor)
+        self.pushButtonBreastCancer.clicked.connect(self.setPageBreastCancer)
+
+        self.pushButtonCheck.clicked.connect(self.checkPneumonia)
+
+    def setPageHome(self):
+        self.stackedWidget.setCurrentWidget(self.home)
+        self.selectButton('pushButtonHome')
+
+    def setPagePneumonia(self):
+        self.stackedWidget.setCurrentWidget(self.pagePneumonia)
+        self.selectButton('pushButtonPneumonia')
+
+
+    def setPageBrainTumor(self):
+        self.stackedWidget.setCurrentWidget(self.pageBrainTumor)
+        self.selectButton('pushButtonBrainTumor')
+
+    def setPageBreastCancer(self):
+        self.stackedWidget.setCurrentWidget(self.pageBrainTumor)
+        self.selectButton('pushButtonBreastCancer')
+
+    def selectButton(self, buttonType):
+        styleSheet = """QPushButton{\n
+                            color: rgb(255, 255, 255);\n
+                            border-radius: 10px;\n
+                            text-color: #FFFFF;\n
+                            padding-top: 7px;\n
+                            padding-bottom: 7px;\n
+                            padding-left: 20px;\n
+                            padding-right: 20px;    \n
+                            background-color: rgb(19, 157, 242);}\n
+                        QPushButton:hover {\n
+                            background-color: rgb(15, 90, 251);}"""
+
+        styleSheetClick = (styleSheet.replace('19, 157, 242', '15, 90, 252')).replace('15, 90, 251', '19, 157, 242')
+
+        if buttonType == 'pushButtonHome':
+            self.pushButtonHome.setStyleSheet(styleSheetClick)
+            self.pushButtonPneumonia.setStyleSheet(styleSheet)
+            self.pushButtonBrainTumor.setStyleSheet(styleSheet)
+            self.pushButtonBreastCancer.setStyleSheet(styleSheet)
+
+        elif buttonType == 'pushButtonPneumonia':
+            self.pushButtonHome.setStyleSheet(styleSheet)
+            self.pushButtonPneumonia.setStyleSheet(styleSheetClick)
+            self.pushButtonBrainTumor.setStyleSheet(styleSheet)
+            self.pushButtonBreastCancer.setStyleSheet(styleSheet)
+
+
+        elif buttonType == 'pushButtonBrainTumor':
+            self.pushButtonHome.setStyleSheet(styleSheet)
+            self.pushButtonPneumonia.setStyleSheet(styleSheet)
+            self.pushButtonBrainTumor.setStyleSheet(styleSheetClick)
+            self.pushButtonBreastCancer.setStyleSheet(styleSheet)
+
+        elif buttonType == 'pushButtonBreastCancer':
+            self.pushButtonHome.setStyleSheet(styleSheet)
+            self.pushButtonBrainTumor.setStyleSheet(styleSheet)
+            self.pushButtonPneumonia.setStyleSheet(styleSheet)
+            self.pushButtonBreastCancer.setStyleSheet(styleSheetClick)
 
     def sendDetail(self, anaylsis, analysisType, value):
         patientName = self.lineEditPatientName.text()
@@ -38,8 +100,9 @@ class Ui(QtWidgets.QMainWindow):
                          'Something went wrong!',
                          buttonStatusOk=True)
 
-    def check(self):
-        StyleSheet = "QProgressBar {\n    border-radius: 10px;\n    background-color: rgb(236, 236, 236);\n}\n\nQProgressBar::chunk{\n    border-radius: 10px;\n    background-color: rgb(4, 191, 123);\n}"
+    def checkPneumonia(self):
+        self.selectButton('pushButtonPneumonia')
+        StyleSheet = "QProgressBar {\n    naborder-radius: 10px;\n    background-color: rgb(236, 236, 236);\n}\n\nQProgressBar:chunk{\n    border-radius: 10px;\n    background-color: rgb(4, 191, 123);\n}"
         fname = QtWidgets.QFileDialog.getOpenFileName(self, 'Open File',os.path.basename('/test/PneumoniaTest/'), "All Files (*);; PNG Files (*.png);; JPG Files (*.jpg)")
         url = fname[0].replace('/','\\')
         self.pixmap = QPixmap(url)
