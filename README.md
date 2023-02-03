@@ -12,8 +12,8 @@
 > - Brain Tumor Detection (3 Type Tumor)
 > - Breast Cancer Detection
 > - Diabetes Detection
-> - Kidney Cancer
-> - Oral Cancer
+> - Kidney Cancer Detection
+> - Oral Cancer Detection
 
 ### Bazı Görseller
 ![Detection](https://github.com/ismaildrcn/HealthApp/blob/master/images/pneumonia-1.gif)  
