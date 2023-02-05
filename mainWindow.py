@@ -1,7 +1,7 @@
 import os.path
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtGui import QPixmap
-from HealthApp.diseases import PneumoniaDetect
+from HealthApp.diseases import PneumoniaDetect, brainTumorDetect
 from mail import SendMail
 import sys
 import time
@@ -20,6 +20,7 @@ class Ui(QtWidgets.QMainWindow):
         self.pushButtonBreastCancer.clicked.connect(self.setPageBreastCancer)
 
         self.pushButtonCheck.clicked.connect(self.checkPneumonia)
+        self.pushButtonCheckBrainTumor.clicked.connect(self.checkBrainTumor)
 
     def setPageHome(self):
         self.stackedWidget.setCurrentWidget(self.home)
@@ -101,36 +102,53 @@ class Ui(QtWidgets.QMainWindow):
         self.selectButton('pushButtonPneumonia')
         StyleSheet = "QProgressBar{\n    border-radius: 10px;\n    background-color: rgb(236, 236, 236);}\nQProgressBar::chunk{\n    border-radius: 10px;\n    background-color: rgb(4, 191, 123);}"
         try:
-            url = self.selectFile()
+            url = self.selectFile(self.label_3)
             self.progressBar.setStyleSheet(StyleSheet.replace('242, 56, 71', '4, 191, 123'))
 
             img = PneumoniaDetect.Preprocessing(self, url)
             value = PneumoniaDetect.detect(self, img)
-            self.Progress(value, StyleSheet)
+            self.Progress(value, StyleSheet, self.progressBar)
             value = '%.4f' % value
             self.pushButtonSendDetail.clicked.connect(lambda: self.sendDetail(url, 'Pneumonia', value))
-        except Exception:
-            pass
+        except Exception: pass
 
-    def selectFile(self):
+    def checkBrainTumor(self):
+        self.selectButton('pushButtonBrainTumor')
+        StyleSheet = "QProgressBar{\n    border-radius: 10px;\n    background-color: rgb(236, 236, 236);}\nQProgressBar::chunk{\n    border-radius: 10px;\n    background-color: rgb(4, 191, 123);}"
+        try:
+            url = self.selectFile(self.label_8)
+            self.progressBar_2.setStyleSheet(StyleSheet.replace('242, 56, 71', '4, 191, 123'))
+
+            img = brainTumorDetect.Preprocessing(self, url)
+            value, label = brainTumorDetect.detect(self, img)
+            self.labelTumorName.setText(label.title())
+            self.Progress(value, StyleSheet, self.progressBar_2)
+            value = '%.4f' % value
+            self.pushButtonSendDetailBrainTumor.clicked.connect(lambda: self.sendDetail(url, 'Brain Tumor: {}'.format(label), value))
+
+        except Exception as error:
+            print(error)
+
+
+    def selectFile(self, label):
         fname = QtWidgets.QFileDialog.getOpenFileName(self, 'Open File', os.path.basename('/test/PneumoniaTest/'),
                                                       "All Files (*);; PNG Files (*.png);; JPG Files (*.jpg)")
         url = fname[0].replace('/', '\\')
         self.pixmap = QPixmap(url)
-        self.label_3.setSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Ignored)
-        self.label_3.setScaledContents(True)
-        self.label_3.setPixmap(self.pixmap)
+        label.setSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Ignored)
+        label.setScaledContents(True)
+        label.setPixmap(self.pixmap)
         return url
 
-    def Progress(self, value, StyleSheet):
+    def Progress(self, value, StyleSheet, bar):
         i = 0
         while i <= value:
             if i > 50 and i < 74:
-                self.progressBar.setStyleSheet(StyleSheet.replace('4, 191, 123', '211, 154, 9'))
+                bar.setStyleSheet(StyleSheet.replace('4, 191, 123', '211, 154, 9'))
             elif i > 75:
-                self.progressBar.setStyleSheet(StyleSheet.replace('4, 191, 123', '242, 56, 71'))
+                bar.setStyleSheet(StyleSheet.replace('4, 191, 123', '242, 56, 71'))
             time.sleep(0.02)
-            self.progressBar.setValue(i)
+            bar.setValue(i)
             i += 1
 
     def message(self, mType, message, buttonStatusOk=False, buttonStatusYes=False, buttonStatusNo=False,
