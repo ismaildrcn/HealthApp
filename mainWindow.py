@@ -77,10 +77,10 @@ class Ui(QtWidgets.QMainWindow):
             self.pushButtonPneumonia.setStyleSheet(styleSheet)
             self.pushButtonBreastCancer.setStyleSheet(styleSheetClick)
 
-    def sendDetail(self, anaylsis, analysisType, value):
-        patientName = self.lineEditPatientName.text()
-        patientID = self.lineEditPatientID.text()
-        doctorMail = self.lineEditDoctorMail.text()
+    def sendDetail(self, x, y, z, anaylsis, analysisType, value):
+        patientName = x.text()
+        patientID = y.text()
+        doctorMail = z.text()
 
         sender = SendMail()
         try:
@@ -109,7 +109,14 @@ class Ui(QtWidgets.QMainWindow):
             value = PneumoniaDetect.detect(self, img)
             self.Progress(value, StyleSheet, self.progressBar)
             value = '%.4f' % value
-            self.pushButtonSendDetail.clicked.connect(lambda: self.sendDetail(url, 'Pneumonia', value))
+
+            self.pushButtonSendDetail.clicked.connect(lambda: self.sendDetail(
+                self.lineEditPatientName,
+                self.lineEditPatientID,
+                self.lineEditDoctorMail,
+                url,
+                'Pneumonia',
+                value))
         except Exception: pass
 
     def checkBrainTumor(self):
@@ -124,7 +131,16 @@ class Ui(QtWidgets.QMainWindow):
             self.labelTumorName.setText(label.title())
             self.Progress(value, StyleSheet, self.progressBar_2)
             value = '%.4f' % value
-            self.pushButtonSendDetailBrainTumor.clicked.connect(lambda: self.sendDetail(url, 'Brain Tumor: {}'.format(label), value))
+            analysisType = 'Brain Tumor: {}'.format(label)
+
+            self.pushButtonSendDetailBrainTumor.clicked.connect(lambda: self.sendDetail(
+                self.lineEditPatientName_2,
+                self.lineEditPatientID_2,
+                self.lineEditDoctorMail_2,
+                url,
+                analysisType,
+                value
+            ))
 
         except Exception as error:
             print(error)

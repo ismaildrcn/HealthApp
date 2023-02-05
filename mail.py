@@ -18,7 +18,7 @@ class SendMail():
         subject = 'Patient: {} Results: {}'.format(patientName,analysisType)
 
         body = """Patient: {}\nPatient ID: {}\nPatient Type: {}\n\nAttention! {} was detected with a probability of %{} in the patient.""".format(patientName,patientID,analysisType,analysisType,value)
-
+        print(body)
         eMail = EmailMessage()
         eMail['From'] = senderMail
         eMail['To'] = reciverMail
@@ -37,5 +37,5 @@ class SendMail():
             smtp.login(senderMail, password)
             smtp.sendmail(senderMail, reciverMail, eMail.as_string())
             smtp.quit()
-        except smtplib.SMTPException:
-            print('error')
+        except smtplib.SMTPException as f:
+            print(f)
