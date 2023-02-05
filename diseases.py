@@ -27,7 +27,16 @@ class brainTumorDetect():
         return img
 
     def detect(self, img):
+        labels = ['glioma','meningioma','no tumor','pituitary']
         model = load_model('weights/brainTumor.h5')
-        result = model.predict(img)
-        result = [x * 100 for x in result[0]]
-        return result
+        results = model.predict(img)
+        results = [x * 100 for x in results[0]]
+
+        counter = 0
+        value = 0
+        for result in results:
+            if result > value:
+                value = result
+                label = labels[counter]
+            counter += 1
+        return value, label
