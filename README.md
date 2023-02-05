@@ -1,15 +1,19 @@
 # Healt App
+Sağlık alanında tahlillere hızlı reaksiyon alabilmek için geliştirmesi hedeflenen Sağlık uygulaması.  
 
 - PyQt5
 - Keras
 
 ## Features
 
-- Pneumonia Detection  
+- Pneumonia Detection
+- Brain Tumor Detection
+  + Glioma
+  + Meningioma
+  + Pituitary
 
 > Geliştirilmeye devam ediyor.
 > Eklenecek özellikler:
-> - Brain Tumor Detection (3 Type Tumor)
 > - Breast Cancer Detection
 > - Diabetes Detection
 > - Kidney Cancer Detection
