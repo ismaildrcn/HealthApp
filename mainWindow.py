@@ -7,7 +7,6 @@ import sys
 import time
 
 
-
 class Ui(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
@@ -29,7 +28,6 @@ class Ui(QtWidgets.QMainWindow):
     def setPagePneumonia(self):
         self.stackedWidget.setCurrentWidget(self.pagePneumonia)
         self.selectButton('pushButtonPneumonia')
-
 
     def setPageBrainTumor(self):
         self.stackedWidget.setCurrentWidget(self.pageBrainTumor)
@@ -66,7 +64,6 @@ class Ui(QtWidgets.QMainWindow):
             self.pushButtonBrainTumor.setStyleSheet(styleSheet)
             self.pushButtonBreastCancer.setStyleSheet(styleSheet)
 
-
         elif buttonType == 'pushButtonBrainTumor':
             self.pushButtonHome.setStyleSheet(styleSheet)
             self.pushButtonPneumonia.setStyleSheet(styleSheet)
@@ -102,20 +99,28 @@ class Ui(QtWidgets.QMainWindow):
 
     def checkPneumonia(self):
         self.selectButton('pushButtonPneumonia')
-        StyleSheet = "QProgressBar {\n    naborder-radius: 10px;\n    background-color: rgb(236, 236, 236);\n}\n\nQProgressBar:chunk{\n    border-radius: 10px;\n    background-color: rgb(4, 191, 123);\n}"
-        fname = QtWidgets.QFileDialog.getOpenFileName(self, 'Open File',os.path.basename('/test/PneumoniaTest/'), "All Files (*);; PNG Files (*.png);; JPG Files (*.jpg)")
-        url = fname[0].replace('/','\\')
+        StyleSheet = "QProgressBar{\n    border-radius: 10px;\n    background-color: rgb(236, 236, 236);}\nQProgressBar::chunk{\n    border-radius: 10px;\n    background-color: rgb(4, 191, 123);}"
+        try:
+            url = self.selectFile()
+            self.progressBar.setStyleSheet(StyleSheet.replace('242, 56, 71', '4, 191, 123'))
+
+            img = PneumoniaDetect.Preprocessing(self, url)
+            value = PneumoniaDetect.detect(self, img)
+            self.Progress(value, StyleSheet)
+            value = '%.4f' % value
+            self.pushButtonSendDetail.clicked.connect(lambda: self.sendDetail(url, 'Pneumonia', value))
+        except Exception:
+            pass
+
+    def selectFile(self):
+        fname = QtWidgets.QFileDialog.getOpenFileName(self, 'Open File', os.path.basename('/test/PneumoniaTest/'),
+                                                      "All Files (*);; PNG Files (*.png);; JPG Files (*.jpg)")
+        url = fname[0].replace('/', '\\')
         self.pixmap = QPixmap(url)
         self.label_3.setSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Ignored)
         self.label_3.setScaledContents(True)
         self.label_3.setPixmap(self.pixmap)
-        self.progressBar.setStyleSheet(StyleSheet.replace('242, 56, 71', '4, 191, 123'))
-
-        img = PneumoniaDetect.Preprocessing(self,url)
-        value = PneumoniaDetect.detect(self,img)
-        self.Progress(value, StyleSheet)
-        value = '%.4f' % value
-        self.pushButtonSendDetail.clicked.connect(lambda: self.sendDetail(url, 'Pneumonia', value))
+        return url
 
     def Progress(self, value, StyleSheet):
         i = 0
